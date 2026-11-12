@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/spendflow.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/spendflow.svg">
+    <title>Sign In | SpendFlow - Expense &amp; Budget Manager</title>
+    <meta name="description" content="Sign in to SpendFlow to view your spending insights, manage expenses, and maintain your budget limits.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page-body">
+    <div class="auth-wrapper">
+
+        <!-- Navigation Header -->
+        <header class="auth-header">
+            <a href="welcome.html" class="logo-area" title="SpendFlow Home">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div>
+                    <h1 class="logo-title">Spend<span>Flow</span></h1>
+                    <p class="logo-subtitle">Personal Expense &amp; Budget Manager</p>
+                </div>
+            </a>
+
+            <div class="auth-header-actions">
+                <a href="welcome.html" class="btn btn-ghost btn-sm" title="Back to Welcome Page">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Welcome</span>
+                </a>
+                <a href="register.html" class="btn btn-secondary btn-sm" title="Don't have an account?">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Register Free</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Auth Container -->
+        <main class="auth-centered-page">
+            <div class="auth-split-layout">
+
+                <!-- Left Column: Welcome Back Banner -->
+                <div class="auth-side-intro">
+                    <div class="welcome-badge">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>Welcome Back to SpendFlow</span>
+                    </div>
+
+                    <h2>Take Control of Your <span class="gradient-text">Spending Journey</span></h2>
+                    <p>
+                        Log in to view your real-time budget status, track recent transactions, and visualize your category breakdowns.
+                    </p>
+
+                    <div class="auth-perks-list">
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>Stay within your monthly spending thresholds</span>
+                        </div>
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>Instant over-budget alert chime and visual warnings</span>
+                        </div>
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>Export your spending transactions to CSV spreadsheet</span>
+                        </div>
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>Dual persistence: MySQL DB + Browser LocalStorage</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Login Card -->
+                <div class="auth-card-container">
+                    <div class="glass-card auth-card">
+
+                        <div class="auth-card-header">
+                            <div class="auth-card-icon">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                            </div>
+                            <h2>Sign In to SpendFlow</h2>
+                            <p>Enter your email and password to access your dashboard</p>
+                        </div>
+
+                        <!-- Feedback Alert Box -->
+                        <div id="auth-alert-box" class="auth-alert hidden" role="alert"></div>
+
+                        <!-- Login Form -->
+                        <form id="login-form" class="auth-form" autocomplete="on">
+                            <!-- Email Address or Username -->
+                            <div class="form-group">
+                                <label for="login-email">Email Address or Username <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-envelope input-icon"></i>
+                                    <input type="text" id="login-email" name="email" placeholder="e.g. nayana or nayana@example.com" required autocomplete="username">
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label for="login-password">Password <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" id="login-password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                                    <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Remember Me Checkbox -->
+                            <label class="form-checkbox-row">
+                                <input type="checkbox" id="remember-me" checked>
+                                <span>Remember me on this browser</span>
+                            </label>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary btn-block submit-btn" id="login-submit-btn">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                                <span>Sign In to Dashboard</span>
+                            </button>
+
+                            <div class="auth-divider">
+                                <span>or 1-click test</span>
+                            </div>
+
+                            <!-- Quick Demo Button -->
+                            <button type="button" class="btn btn-secondary btn-block" id="demo-login-btn">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>Quick Demo Sign In (Nayana)</span>
+                            </button>
+                        </form>
+
+                        <!-- Card Footer -->
+                        <div class="auth-card-footer">
+                            <p>Don't have an account yet? <a href="register.html" id="switch-to-register-link">Register now</a></p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>SpendFlow &copy; <span id="auth-year"></span> &bull; Built with Spring Boot, HTML5, Vanilla CSS &bull; Elegant Purple &amp; White Theme</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="pwa.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

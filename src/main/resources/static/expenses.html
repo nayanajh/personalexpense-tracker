@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/spendflow.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/spendflow.svg">
+    <title>Expense Transactions &amp; Management | SpendFlow</title>
+    <meta name="description" content="Add new expenses, filter transactions, search records, and manage personal expenses in SpendFlow.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="header-container">
+                <a href="index.html" class="logo-area" style="text-decoration: none; color: inherit;">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h1 class="logo-title">Spend<span>Flow</span></h1>
+                        <p class="logo-subtitle">Personal Expense &amp; Budget Manager</p>
+                    </div>
+                </a>
+
+                <!-- Multi-Page Navigation Bar -->
+                <nav class="app-main-nav" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-tab-link"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+                    <a href="expenses.html" class="nav-tab-link active"><i class="fa-solid fa-receipt"></i> <span>Expenses</span></a>
+                    <a href="categories.html" class="nav-tab-link"><i class="fa-solid fa-chart-pie"></i> <span>Categories</span></a>
+                    <a href="features.html" class="nav-tab-link"><i class="fa-solid fa-sparkles"></i> <span>Features</span></a>
+                </nav>
+
+                <div class="header-actions">
+                    <div class="currency-selector-wrapper">
+                        <label for="currency-select"><i class="fa-solid fa-coins"></i></label>
+                        <select id="currency-select" title="Select Currency">
+                            <option value="₹" selected>INR (₹)</option>
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="£">GBP (£)</option>
+                            <option value="C$">CAD (C$)</option>
+                            <option value="A$">AUD (A$)</option>
+                        </select>
+                    </div>
+
+                    <button id="open-budget-modal-btn" class="btn btn-secondary" title="Update Monthly Budget">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Edit Budget</span>
+                    </button>
+
+                    <button id="export-csv-btn" class="btn btn-ghost" title="Export Expenses to CSV">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Export</span>
+                    </button>
+
+                    <!-- User Profile Header Widget -->
+                    <div id="user-profile-widget" class="user-profile-header" title="Current User Account">
+                        <span class="user-profile-avatar" id="user-profile-avatar"><i class="fa-solid fa-user"></i></span>
+                        <span id="user-profile-name">Guest</span>
+                        <button type="button" class="user-logout-btn" id="user-logout-btn" title="Sign Out or Switch User">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Container -->
+        <main class="main-container">
+
+            <!-- Page Hero Banner -->
+            <div class="page-hero-banner">
+                <div class="page-hero-left">
+                    <div class="page-hero-icon">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <div>
+                        <h2 class="page-hero-title">Expenses &amp; Transactions Hub</h2>
+                        <p class="page-hero-subtitle">Log new transactions, filter by category or date, and search your entire expense history.</p>
+                    </div>
+                </div>
+                <div class="page-hero-actions">
+                    <a href="categories.html" class="btn btn-secondary">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>View Category Analytics</span>
+                    </a>
+                    <a href="index.html" class="btn btn-ghost">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Two-Column Expense Layout: Form on Left, List on Right -->
+            <div class="dashboard-grid">
+
+                <!-- Left Column: Add New Expense Form -->
+                <div class="card expense-form-card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon-badge">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title" id="expense-form-title">Add New Expense</h3>
+                                <p class="card-subtitle">Log your transaction quickly</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <form id="expense-form" autocomplete="off">
+                            <div class="receipt-scan-panel">
+                                <input type="file" id="receipt-image-input" accept="image/jpeg,image/png,image/webp" hidden>
+                                <button type="button" class="btn btn-secondary btn-block" id="scan-receipt-btn">
+                                    <i class="fa-solid fa-camera"></i>
+                                    <span>Scan a receipt</span>
+                                </button>
+                                <p class="receipt-scan-help">Use your camera or choose a receipt image from your gallery. Details are read in your browser; review them before saving.</p>
+                                <p id="receipt-scan-status" class="receipt-scan-status hidden" role="status" aria-live="polite"></p>
+                            </div>
+
+                            <!-- Expense Title -->
+                            <div class="form-group">
+                                <label for="expense-title">Expense Title <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-tag input-icon"></i>
+                                    <input type="text" id="expense-title" placeholder="e.g., Grocery Shopping, Uber ride" required maxlength="100">
+                                </div>
+                            </div>
+
+                            <!-- Amount & Category Row -->
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label for="expense-amount">Amount <span class="required">*</span></label>
+                                    <div class="input-wrapper">
+                                        <span class="input-prefix" id="form-currency-prefix">₹</span>
+                                        <input type="number" id="expense-amount" min="0.01" step="any" placeholder="0.00" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="expense-category">Category <span class="required">*</span></label>
+                                    <div class="input-wrapper">
+                                        <i class="fa-solid fa-shapes input-icon"></i>
+                                        <select id="expense-category" required>
+                                            <option value="" disabled selected>Select Category</option>
+                                            <option value="Food & Dining">🍽️ Food &amp; Dining</option>
+                                            <option value="Shopping & Groceries">🛍️ Shopping &amp; Groceries</option>
+                                            <option value="Transportation">🚗 Transportation</option>
+                                            <option value="Bills & Utilities">⚡ Bills &amp; Utilities</option>
+                                            <option value="Entertainment">🎬 Entertainment</option>
+                                            <option value="Health & Medical">💊 Health &amp; Medical</option>
+                                            <option value="Education">🎓 Education</option>
+                                            <option value="Travel & Leisure">✈️ Travel &amp; Leisure</option>
+                                            <option value="Other">🏷️ Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date & Payment Method Row -->
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label for="expense-date">Date <span class="required">*</span></label>
+                                    <div class="input-wrapper">
+                                        <i class="fa-solid fa-calendar-day input-icon"></i>
+                                        <input type="date" id="expense-date" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="expense-payment">Payment Method</label>
+                                    <div class="input-wrapper">
+                                        <i class="fa-solid fa-credit-card input-icon"></i>
+                                        <select id="expense-payment">
+                                            <option value="UPI" selected>UPI / GooglePay / PhonePe</option>
+                                            <option value="Credit Card">Credit Card</option>
+                                            <option value="Debit Card">Debit Card</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Bank Transfer">Bank Transfer / Net Banking</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notes / Description -->
+                            <div class="form-group">
+                                <label for="expense-notes">Optional Note</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-pen-clip input-icon"></i>
+                                    <input type="text" id="expense-notes" placeholder="e.g., Dinner with team, monthly fuel" maxlength="150">
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary btn-block submit-btn" id="submit-expense-btn">
+                                <i class="fa-solid fa-plus-circle"></i>
+                                <span>Record Expense</span>
+                            </button>
+                            <button type="button" class="btn btn-ghost btn-block hidden" id="cancel-expense-edit-btn">
+                                Cancel editing
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <section class="shared-split-card card" aria-labelledby="shared-split-title">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon-badge"><i class="fa-solid fa-people-arrows-left-right"></i></div>
+                            <div>
+                                <h2 class="card-title" id="shared-split-title">Split an Expense</h2>
+                                <p class="card-subtitle">Share a bill equally with friends. Each person’s share is calculated for you.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="shared-split-form" class="shared-split-form">
+                            <div class="goal-field">
+                                <label for="shared-split-expense">Expense to split</label>
+                                <select id="shared-split-expense" required>
+                                    <option value="" selected disabled>Choose an expense</option>
+                                </select>
+                            </div>
+                            <div class="goal-field">
+                                <label for="shared-split-people">Friends’ names</label>
+                                <input type="text" id="shared-split-people" maxlength="300" placeholder="e.g., Alex, Sam, Priya" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> Split equally</button>
+                        </form>
+                        <p class="shared-split-note">Enter every person sharing the expense, including yourself. This records the split; it does not transfer money.</p>
+                        <div id="shared-splits-list" class="shared-splits-list" aria-live="polite"></div>
+                    </div>
+                </section>
+
+                <!-- Right Column: Expense Transactions List -->
+                <div class="card expense-list-card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon-badge">
+                                <i class="fa-solid fa-list-check"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title">Expense Transactions</h3>
+                                <p class="card-subtitle">Showing <span id="filtered-count">0</span> of <span id="total-count">0</span> records</p>
+                            </div>
+                        </div>
+
+                        <div class="card-header-actions">
+                            <button type="button" class="btn btn-ghost btn-sm text-danger" id="clear-all-btn" title="Clear All Expenses">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Clear All</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <section class="card-body" aria-labelledby="statement-import-title">
+                        <div class="card-title-group">
+                            <div class="card-icon-badge"><i class="fa-solid fa-file-import"></i></div>
+                            <div>
+                                <h3 class="card-title" id="statement-import-title">Import online payments</h3>
+                                <p class="card-subtitle">Import a CSV statement downloaded from your bank or payment app. No account connection needed.</p>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label for="statement-file-input">Payment statement (CSV)</label>
+                            <input type="file" id="statement-file-input" accept=".csv,.tsv,text/csv,text/tab-separated-values">
+                            <p class="receipt-scan-help">Choose a CSV/TSV with transaction date, description, and amount columns. Amounts are not converted, so match the selected currency; ambiguous dates are read as day/month/year.</p>
+                        </div>
+                        <div id="statement-import-review" class="hidden" aria-live="polite">
+                            <p id="statement-import-summary"></p>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr><th>Date</th><th>Description</th><th>Amount</th><th>Category</th></tr>
+                                    </thead>
+                                    <tbody id="statement-import-preview"></tbody>
+                                </table>
+                            </div>
+                            <div class="card-header-actions" style="margin-top: 1rem;">
+                                <button type="button" class="btn btn-ghost" id="cancel-statement-import-btn">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="confirm-statement-import-btn">Import transactions</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Search & Filter Controls Toolbar -->
+                    <div class="list-controls-bar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" id="search-input" placeholder="Search by title, note, or amount..." autocomplete="off">
+                            <button type="button" id="clear-search-btn" class="clear-search hidden" title="Clear search">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <div class="filter-controls">
+                            <!-- Category Filter -->
+                            <div class="filter-select-wrapper">
+                                <label for="category-filter"><i class="fa-solid fa-filter"></i></label>
+                                <select id="category-filter" title="Filter by Category">
+                                    <option value="ALL">All Categories</option>
+                                    <option value="Food & Dining">Food &amp; Dining</option>
+                                    <option value="Shopping & Groceries">Shopping &amp; Groceries</option>
+                                    <option value="Transportation">Transportation</option>
+                                    <option value="Bills & Utilities">Bills &amp; Utilities</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Health & Medical">Health &amp; Medical</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Travel & Leisure">Travel &amp; Leisure</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Sort Options -->
+                            <div class="filter-select-wrapper">
+                                <label for="sort-select"><i class="fa-solid fa-arrow-down-short-wide"></i></label>
+                                <select id="sort-select" title="Sort Expenses">
+                                    <option value="date-desc">Newest First</option>
+                                    <option value="date-asc">Oldest First</option>
+                                    <option value="amount-desc">Highest Amount</option>
+                                    <option value="amount-asc">Lowest Amount</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter summary chips / stats -->
+                    <div class="filter-summary-row" id="filter-summary-row">
+                        <span id="filter-summary-text">Displaying all expenses</span>
+                        <span class="filter-total-badge">Total: <strong id="filtered-total-amount">₹0.00</strong></span>
+                    </div>
+
+                    <!-- Expense List Container -->
+                    <div class="card-body list-body">
+                        <div id="expense-list" class="expense-items-container" role="list">
+                            <!-- Items injected dynamically by script.js -->
+                        </div>
+
+                        <!-- Empty State Notice -->
+                        <div id="empty-state" class="empty-state hidden">
+                            <div class="empty-icon-wrap">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                            <h4 id="empty-state-title">No Expenses Found</h4>
+                            <p id="empty-state-desc">You haven't recorded any expenses yet. Use the form on the left to add your first expense!</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>SpendFlow &copy; <span id="current-year"></span> &bull; Crafted with Purple &amp; White Elegance &bull; Full-Stack Java &amp; LocalStorage</p>
+        </footer>
+    </div>
+
+    <!-- Edit Monthly Budget Modal -->
+    <div class="modal-backdrop hidden" id="budget-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-icon"><i class="fa-solid fa-coins"></i></div>
+                    <div>
+                        <h3 class="modal-title">Set Monthly Budget</h3>
+                        <p class="modal-subtitle">Define your spending limit for this month</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="close-budget-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="budget-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="budget-input">Monthly Budget Limit (<span id="modal-currency-symbol">₹</span>)</label>
+                        <div class="input-wrapper input-wrapper-lg">
+                            <span class="input-prefix" id="budget-currency-prefix">₹</span>
+                            <input type="number" id="budget-input" min="1" step="any" placeholder="e.g. 1000 or 25000" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" id="cancel-budget-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Budget</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Clear All Modal -->
+    <div class="modal-backdrop hidden" id="confirm-modal">
+        <div class="modal-dialog modal-dialog-sm">
+            <div class="modal-header danger-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-icon danger-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div>
+                        <h3 class="modal-title">Clear All Expenses?</h3>
+                        <p class="modal-subtitle">This action cannot be undone</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="close-confirm-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete all recorded expenses? Your budget configuration will remain intact.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" id="cancel-confirm-btn">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-clear-all-btn">Yes, Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="pwa.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

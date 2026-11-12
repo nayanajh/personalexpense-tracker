@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/spendflow.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/spendflow.svg">
+    <title>Create Free Account | SpendFlow - Expense &amp; Budget Manager</title>
+    <meta name="description" content="Register for SpendFlow to manage your monthly budget, track daily expenses, and stay ahead with real-time risk alerts.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page-body">
+    <div class="auth-wrapper">
+
+        <!-- Navigation Header -->
+        <header class="auth-header">
+            <a href="welcome.html" class="logo-area" title="SpendFlow Home">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div>
+                    <h1 class="logo-title">Spend<span>Flow</span></h1>
+                    <p class="logo-subtitle">Personal Expense &amp; Budget Manager</p>
+                </div>
+            </a>
+
+            <div class="auth-header-actions">
+                <a href="welcome.html" class="btn btn-ghost btn-sm" title="Back to Welcome Page">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Welcome</span>
+                </a>
+                <a href="login.html" class="btn btn-secondary btn-sm" title="Already have an account?">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Sign In</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Auth Container -->
+        <main class="auth-centered-page">
+            <div class="auth-split-layout">
+
+                <!-- Left Column: Value Proposition & Perks -->
+                <div class="auth-side-intro">
+                    <div class="welcome-badge">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>100% Free &bull; Secure &bull; Dual Offline Sync</span>
+                    </div>
+
+                    <h2>Start Your Journey to <span class="gradient-text">Financial Freedom</span></h2>
+                    <p>
+                        SpendFlow helps you track every rupee, set mindful limits, and get proactive notifications before you overspend.
+                    </p>
+
+                    <div class="auth-perks-list">
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>4-Tier Risk Alerts (Safe, 70% Alert, 85% Warning, Breach)</span>
+                        </div>
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>Visual Donut Chart for instant category breakdown</span>
+                        </div>
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>Full-stack Java Spring Boot &amp; MySQL + Offline LocalStorage</span>
+                        </div>
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>1-Click CSV export and customizable currency support (₹ default)</span>
+                        </div>
+                        <div class="auth-perk-item">
+                            <span class="perk-check"><i class="fa-solid fa-check"></i></span>
+                            <span>Zero intrusive ads, private, and lightning fast</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Registration Card -->
+                <div class="auth-card-container">
+                    <div class="glass-card auth-card">
+
+                        <div class="auth-card-header">
+                            <div class="auth-card-icon">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </div>
+                            <h2>Create Account</h2>
+                            <p>Register with your username, email and password</p>
+                        </div>
+
+                        <!-- Feedback Alert Box -->
+                        <div id="auth-alert-box" class="auth-alert hidden" role="alert"></div>
+
+                        <!-- Registration Form -->
+                        <form id="register-form" class="auth-form" autocomplete="on">
+                            <!-- Username -->
+                            <div class="form-group">
+                                <label for="register-name">Username <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-user input-icon"></i>
+                                    <input type="text" id="register-name" name="username" placeholder="e.g. nayana" required maxlength="100" autocomplete="username">
+                                </div>
+                            </div>
+
+                            <!-- Email Address -->
+                            <div class="form-group">
+                                <label for="register-email">Email Address <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-envelope input-icon"></i>
+                                    <input type="email" id="register-email" name="email" placeholder="e.g. nayana@example.com" required maxlength="120" autocomplete="email">
+                                </div>
+                            </div>
+
+                            <!-- Initial Monthly Budget (Rupees) -->
+                            <div class="form-group">
+                                <label for="register-budget">Initial Monthly Budget (₹) <span style="font-weight: normal; color: var(--gray-400); font-size: 0.8rem;">(Optional)</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-indian-rupee-sign input-icon"></i>
+                                    <input type="number" id="register-budget" name="budget" placeholder="25000" value="25000" min="500" step="500">
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label for="register-password">Create Password <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" id="register-password" name="password" placeholder="At least 4 characters" minlength="4" required autocomplete="new-password">
+                                    <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                                <!-- Password Strength Meter -->
+                                <div class="password-strength-wrapper">
+                                    <div class="strength-bar-bg">
+                                        <div class="strength-bar-fill" id="strength-bar-fill"></div>
+                                    </div>
+                                    <div class="strength-text">
+                                        <span>Password Strength:</span>
+                                        <span class="strength-badge" id="strength-badge">Enter password</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="form-group">
+                                <label for="register-confirm-password">Confirm Password <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-shield-check input-icon"></i>
+                                    <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Re-enter your password" required autocomplete="new-password">
+                                </div>
+                                <div class="password-match-tag hidden" id="password-match-tag"></div>
+                            </div>
+
+                            <!-- Terms and Conditions Checkbox -->
+                            <label class="form-checkbox-row">
+                                <input type="checkbox" id="register-terms" checked required>
+                                <span>I agree to keep my personal budget updated and abide by smart financial guidelines.</span>
+                            </label>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary btn-block submit-btn" id="register-submit-btn">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Create My Account</span>
+                            </button>
+
+                            <div class="auth-divider">
+                                <span>or try instant demo</span>
+                            </div>
+
+                            <!-- Quick Demo Button -->
+                            <button type="button" class="btn btn-secondary btn-block" id="demo-login-btn">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>Quick 1-Click Demo Access</span>
+                            </button>
+                        </form>
+
+                        <!-- Card Footer -->
+                        <div class="auth-card-footer">
+                            <p>Already have an account? <a href="login.html" id="switch-to-login-link">Sign In here</a></p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>SpendFlow &copy; <span id="auth-year"></span> &bull; Built with Spring Boot, HTML5, Vanilla CSS &bull; Elegant Purple &amp; White Theme</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="pwa.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

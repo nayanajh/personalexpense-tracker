@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/spendflow.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/spendflow.svg">
+    <title>SpendFlow | Executive Dashboard</title>
+    <meta name="description" content="A modern, simple and attractive Personal Expense and Budget Manager to track spending, set monthly budgets, and analyze category expenses with ease.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="header-container">
+                <div class="logo-area">
+                    <a href="welcome.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.85rem;">
+                        <div class="logo-icon">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div>
+                            <h1 class="logo-title">Spend<span>Flow</span></h1>
+                            <p class="logo-subtitle">Personal Expense &amp; Budget Manager</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Main Application Page Navigation Tabs -->
+                <nav class="app-main-nav" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-tab-link active" title="Executive Dashboard">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="expenses.html" class="nav-tab-link" title="Expense Management &amp; History">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>Expenses</span>
+                    </a>
+                    <a href="categories.html" class="nav-tab-link" title="Category Breakdown &amp; Donut Chart">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="features.html" class="nav-tab-link" title="Features &amp; System Capabilities">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>Features</span>
+                    </a>
+                </nav>
+
+                <div class="header-actions">
+                    <div class="currency-selector-wrapper">
+                        <label for="currency-select"><i class="fa-solid fa-coins"></i></label>
+                        <select id="currency-select" title="Select Currency">
+                            <option value="₹" selected>INR (₹)</option>
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="£">GBP (£)</option>
+                            <option value="C$">CAD (C$)</option>
+                            <option value="A$">AUD (A$)</option>
+                        </select>
+                    </div>
+
+                    <button id="open-budget-modal-btn" class="btn btn-secondary" title="Update Monthly Budget">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Edit Budget</span>
+                    </button>
+
+                    <button id="export-csv-btn" class="btn btn-ghost" title="Export Expenses to CSV">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Export</span>
+                    </button>
+
+                    <a href="welcome.html" class="btn btn-ghost" title="Explore Welcome &amp; Info Page">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Welcome</span>
+                    </a>
+
+                    <!-- User Profile Header Widget -->
+                    <div id="user-profile-widget" class="user-profile-header" title="Current User Account">
+                        <span class="user-profile-avatar" id="user-profile-avatar"><i class="fa-solid fa-user"></i></span>
+                        <span id="user-profile-name">Guest</span>
+                        <button type="button" class="user-logout-btn" id="user-logout-btn" title="Sign Out or Switch User">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Container -->
+        <main class="main-container">
+
+            <!-- Risk Level & Budget Notification Alert Hub -->
+            <div id="budget-alert-banner" class="budget-alert-banner risk-banner hidden" role="alert">
+                <div class="alert-content">
+                    <div class="alert-icon-box" id="alert-icon">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="alert-text">
+                        <div class="risk-badge-row">
+                            <span class="risk-badge" id="risk-badge">SAFE</span>
+                            <span class="risk-score" id="risk-score">0% Consumed</span>
+                        </div>
+                        <h4 id="alert-title">Budget Notice</h4>
+                        <p id="alert-message">Keep track of your expenses to stay within your monthly budget.</p>
+                    </div>
+                </div>
+                <div class="alert-actions">
+                    <button type="button" id="enable-notifications-btn" class="btn btn-sm btn-outline-alert" title="Enable browser alerts for over-budget warnings">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>Enable Alerts</span>
+                    </button>
+                    <button class="alert-close-btn" id="close-alert-btn" aria-label="Dismiss alert">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Overview Statistics Cards -->
+            <section class="overview-grid" aria-label="Budget Overview">
+                <!-- Monthly Budget Card -->
+                <div class="stat-card stat-budget">
+                    <div class="stat-header">
+                        <span class="stat-label">Monthly Budget</span>
+                        <div class="stat-icon-wrapper bg-purple-soft">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="stat-total-budget">Not set</div>
+                    <div class="stat-footer">
+                        <span class="stat-badge" id="budget-period-badge">This Month</span>
+                        <button class="text-link-btn" id="quick-edit-budget">Change limit</button>
+                    </div>
+                </div>
+
+                <!-- Total Spent Card -->
+                <div class="stat-card stat-spent">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Spending</span>
+                        <div class="stat-icon-wrapper bg-purple-medium">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="stat-total-spent">₹0.00</div>
+                    <div class="stat-footer">
+                        <span class="stat-note" id="stat-spent-percentage">Set a budget to track usage</span>
+                    </div>
+                </div>
+
+                <!-- Remaining Balance Card -->
+                <div class="stat-card stat-balance" id="stat-balance-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Remaining Balance</span>
+                        <div class="stat-icon-wrapper" id="balance-icon-wrapper">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="stat-remaining-balance">Set a budget</div>
+                    <div class="stat-footer">
+                        <span class="stat-status-tag" id="balance-status-tag">Budget not set</span>
+                    </div>
+                </div>
+
+                <!-- Budget Health & Risk Level Card -->
+                <div class="stat-card stat-progress" id="stat-risk-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Risk Level &amp; Budget</span>
+                        <span class="risk-level-pill risk-pill-safe" id="risk-level-pill">Budget not set</span>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="budget-progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="stat-footer progress-footer">
+                        <span id="progress-status-caption">Set a monthly budget to enable risk alerts.</span>
+                        <span class="progress-percent-label" id="progress-percent-number">0%</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="in-app-notifications" aria-labelledby="in-app-notifications-title">
+                <div class="notifications-heading">
+                    <div>
+                        <h2 id="in-app-notifications-title"><i class="fa-solid fa-bell"></i> Notifications</h2>
+                        <p id="notification-storage-note">Important budget and spending updates.</p>
+                    </div>
+                    <button type="button" class="btn btn-ghost btn-sm" id="refresh-notifications-btn">Refresh</button>
+                </div>
+                <div id="in-app-notifications-list" aria-live="polite"></div>
+            </section>
+
+            <!-- Clean Executive 2-Column Dashboard Layout -->
+            <div class="dashboard-layout">
+
+                <!-- Left Column: Recent Expense Activity Preview -->
+                <div class="dashboard-column left-column">
+                    <div class="glass-card list-card">
+                        <div class="card-header flex-between">
+                            <div class="card-title-group">
+                                <div class="card-title-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                                <div>
+                                    <h2 class="card-title">Recent Transactions</h2>
+                                    <p class="card-subtitle">Your latest logged expenses</p>
+                                </div>
+                            </div>
+
+                            <div class="dashboard-card-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+                                <a href="expenses.html" class="btn btn-primary btn-sm">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Add Expense</span>
+                                </a>
+                                <a href="expenses.html" class="btn btn-ghost btn-sm" title="View all expenses">
+                                    <span>View All</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Recent Expenses Container -->
+                        <div style="padding: 1rem 0;">
+                            <div id="recent-expenses-preview">
+                                <!-- Populated dynamically by script.js -->
+                            </div>
+                        </div>
+
+                        <div class="list-summary-bar">
+                            <span>Need to manage or filter transactions?</span>
+                            <a href="expenses.html" style="color: var(--primary-600); font-weight: 700; text-decoration: none;">
+                                Open Full Expenses Page &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Top Category Highlights Preview -->
+                <div class="dashboard-column right-column">
+                    <div class="glass-card analytics-card">
+                        <div class="card-header flex-between">
+                            <div class="card-title-group">
+                                <div class="card-title-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                                <div>
+                                    <h2 class="card-title">Category Spending Highlights</h2>
+                                    <p class="card-subtitle">Top spending distribution this month</p>
+                                </div>
+                            </div>
+
+                            <a href="categories.html" class="btn btn-secondary btn-sm" title="Open Full Category Breakdown & Donut Chart">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <span>Full Donut Chart &rarr;</span>
+                            </a>
+                        </div>
+
+                        <!-- Dynamic Top Categories Container -->
+                        <div style="padding: 1rem 0;">
+                            <div id="dashboard-top-categories">
+                                <!-- Populated dynamically by script.js -->
+                            </div>
+                        </div>
+
+                        <div class="list-summary-bar">
+                            <span>Explore all 9 budget categories and donut analytics:</span>
+                            <a href="categories.html" style="color: var(--primary-600); font-weight: 700; text-decoration: none;">
+                                View Category Analytics &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <section class="savings-goals-section" aria-labelledby="savings-goals-title">
+                <div class="goals-section-header">
+                    <div>
+                        <div class="card-title-group">
+                            <div class="card-title-icon"><i class="fa-solid fa-bullseye"></i></div>
+                            <div>
+                                <h2 class="card-title" id="savings-goals-title">Savings Goals</h2>
+                                <p class="card-subtitle">Small steps add up. Track something you’re saving for.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="goals-storage-note"><i class="fa-solid fa-lock"></i> Saved in this browser</span>
+                </div>
+
+                <form id="savings-goal-form" class="savings-goal-form">
+                    <div class="goal-field">
+                        <label for="goal-name">What are you saving for?</label>
+                        <input type="text" id="goal-name" maxlength="60" placeholder="e.g., Emergency fund, new phone" required>
+                    </div>
+                    <div class="goal-field">
+                        <label for="goal-target">Savings target (<span id="goal-currency-symbol">₹</span>)</label>
+                        <input type="number" id="goal-target" min="0.01" step="any" placeholder="Target amount" required>
+                    </div>
+                    <div class="goal-field">
+                        <label for="goal-saved">Already saved (<span id="goal-currency-symbol-copy">₹</span>, optional)</label>
+                        <input type="number" id="goal-saved" min="0" step="any" placeholder="0.00" value="0">
+                    </div>
+                    <div class="goal-field">
+                        <label for="goal-deadline">Target date <span>(optional)</span></label>
+                        <input type="date" id="goal-deadline">
+                    </div>
+                    <button type="submit" class="btn btn-primary savings-goal-submit">
+                        <i class="fa-solid fa-plus"></i> Create goal
+                    </button>
+                </form>
+
+                <div id="savings-goals-list" class="savings-goals-list" aria-live="polite"></div>
+                <div id="savings-goals-empty" class="savings-goals-empty">
+                    <i class="fa-solid fa-piggy-bank"></i>
+                    <p>Your next goal starts here. Create one above to track your progress.</p>
+                </div>
+            </section>
+
+            <!-- Quick Navigation Row to Dedicated Sections -->
+            <div class="dashboard-quick-links-row" style="margin-top: 2rem;">
+                <a href="expenses.html" class="quick-nav-card">
+                    <div class="quick-nav-left">
+                        <div class="quick-nav-icon" style="background: var(--primary-100); color: var(--primary-700);">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <div>
+                            <div class="quick-nav-title">Expense Management Page</div>
+                            <div class="quick-nav-subtitle">Add new expenses, live search, filter by category, sort &amp; export to CSV</div>
+                        </div>
+                    </div>
+                    <div class="quick-nav-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="categories.html" class="quick-nav-card">
+                    <div class="quick-nav-left">
+                        <div class="quick-nav-icon" style="background: #fce7f3; color: #ec4899;">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <div class="quick-nav-title">Category Breakdown &amp; Donut Chart</div>
+                            <div class="quick-nav-subtitle">Interactive Chart.js donut visualization, progress shares &amp; category cards</div>
+                        </div>
+                    </div>
+                    <div class="quick-nav-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="features.html" class="quick-nav-card">
+                    <div class="quick-nav-left">
+                        <div class="quick-nav-icon" style="background: #dbeafe; color: #2563eb;">
+                            <i class="fa-solid fa-sparkles"></i>
+                        </div>
+                        <div>
+                            <div class="quick-nav-title">SpendFlow Features Showcase</div>
+                            <div class="quick-nav-subtitle">4-Tier Risk Engine, Web Audio synthesizer chime, Desktop push alerts &amp; dual storage</div>
+                        </div>
+                    </div>
+                    <div class="quick-nav-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>SpendFlow &copy; <span id="current-year"></span> &bull; Crafted with Purple &amp; White Elegance &bull; Stored locally in your browser &amp; Spring Boot MySQL</p>
+        </footer>
+    </div>
+
+    <!-- Edit Monthly Budget Modal -->
+    <div class="modal-backdrop hidden" id="budget-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-icon"><i class="fa-solid fa-coins"></i></div>
+                    <div>
+                        <h3 class="modal-title">Set Monthly Budget</h3>
+                        <p class="modal-subtitle">Define your spending limit for this month</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="close-budget-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="budget-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="budget-input">Monthly Budget Limit (<span id="modal-currency-symbol">₹</span>)</label>
+                        <div class="input-wrapper input-wrapper-lg">
+                            <span class="input-prefix" id="budget-currency-prefix">₹</span>
+                            <input type="number" id="budget-input" min="1" step="any" placeholder="e.g. 1000 or 25000" required>
+                        </div>
+                        <p class="field-hint">Enter any budget limit (e.g. 1000, 5000, 25000). You'll receive real-time risk alerts and notifications when approaching or exceeding it.</p>
+                    </div>
+
+                    <!-- Quick Preset Buttons -->
+                    <div class="budget-presets">
+                        <span class="presets-label">Quick adjust:</span>
+                        <div class="preset-buttons">
+                            <button type="button" class="preset-btn" data-add="1000">+1,000</button>
+                            <button type="button" class="preset-btn" data-add="5000">+5,000</button>
+                            <button type="button" class="preset-btn" data-set="25000">Set 25k</button>
+                            <button type="button" class="preset-btn" data-set="50000">Set 50k</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" id="cancel-budget-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Budget</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Clear All Modal -->
+    <div class="modal-backdrop hidden" id="confirm-modal">
+        <div class="modal-dialog modal-dialog-sm">
+            <div class="modal-header danger-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-icon danger-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div>
+                        <h3 class="modal-title">Clear All Expenses?</h3>
+                        <p class="modal-subtitle">This action cannot be undone</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="close-confirm-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete all recorded expenses? Your budget configuration will remain intact.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" id="cancel-confirm-btn">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-clear-all-btn">Yes, Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Gate / First-Time Sign In Prompt Modal -->
+    <div class="modal-backdrop hidden" id="auth-gate-modal" role="dialog" aria-modal="true">
+        <div class="modal-dialog auth-gate-dialog">
+            <div class="auth-gate-content">
+                <div class="auth-gate-icon">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <h3 class="auth-gate-title">Welcome to Spend<span>Flow</span></h3>
+                <p class="auth-gate-subtitle">Please sign in or create an account to manage your personal expenses, track monthly budgets, and receive risk alerts.</p>
+
+                <div class="auth-gate-buttons">
+                    <a href="login.html" class="btn btn-primary btn-block btn-lg" id="gate-signin-btn">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>Sign In to Account</span>
+                    </a>
+
+                    <a href="register.html" class="btn btn-secondary btn-block btn-lg" id="gate-register-btn">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>Create Free Account</span>
+                    </a>
+
+                    <div class="auth-divider">
+                        <span>or test immediately</span>
+                    </div>
+
+                    <button type="button" class="btn btn-ghost btn-block" id="gate-demo-btn">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Quick 1-Click Demo (Nayana)</span>
+                    </button>
+
+                    <button type="button" class="btn btn-ghost btn-sm" id="gate-guest-btn" style="color: var(--gray-500); margin-top: 0.25rem;">
+                        <span>Continue as Guest</span>
+                    </button>
+                </div>
+
+                <div class="auth-gate-footer">
+                    <a href="welcome.html"><i class="fa-solid fa-compass"></i> Explore Welcome &amp; Features Showcase &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="pwa.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

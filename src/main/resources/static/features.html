@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/spendflow.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/spendflow.svg">
+    <title>Features &amp; Capabilities | SpendFlow</title>
+    <meta name="description" content="Explore the comprehensive personal finance and budget tracking features in SpendFlow.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="header-container">
+                <a href="index.html" class="logo-area" style="text-decoration: none; color: inherit;">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h1 class="logo-title">Spend<span>Flow</span></h1>
+                        <p class="logo-subtitle">Personal Expense &amp; Budget Manager</p>
+                    </div>
+                </a>
+
+                <!-- Multi-Page Navigation Bar -->
+                <nav class="app-main-nav" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-tab-link"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+                    <a href="expenses.html" class="nav-tab-link"><i class="fa-solid fa-receipt"></i> <span>Expenses</span></a>
+                    <a href="categories.html" class="nav-tab-link"><i class="fa-solid fa-chart-pie"></i> <span>Categories</span></a>
+                    <a href="features.html" class="nav-tab-link active"><i class="fa-solid fa-sparkles"></i> <span>Features</span></a>
+                </nav>
+
+                <div class="header-actions">
+                    <div class="currency-selector-wrapper">
+                        <label for="currency-select"><i class="fa-solid fa-coins"></i></label>
+                        <select id="currency-select" title="Select Currency">
+                            <option value="₹" selected>INR (₹)</option>
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="£">GBP (£)</option>
+                            <option value="C$">CAD (C$)</option>
+                            <option value="A$">AUD (A$)</option>
+                        </select>
+                    </div>
+
+                    <button id="open-budget-modal-btn" class="btn btn-secondary" title="Update Monthly Budget">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Edit Budget</span>
+                    </button>
+
+                    <button id="export-csv-btn" class="btn btn-ghost" title="Export Expenses to CSV">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Export</span>
+                    </button>
+
+                    <!-- User Profile Header Widget -->
+                    <div id="user-profile-widget" class="user-profile-header" title="Current User Account">
+                        <span class="user-profile-avatar" id="user-profile-avatar"><i class="fa-solid fa-user"></i></span>
+                        <span id="user-profile-name">Guest</span>
+                        <button type="button" class="user-logout-btn" id="user-logout-btn" title="Sign Out or Switch User">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Container -->
+        <main class="main-container">
+
+            <!-- Page Hero Banner -->
+            <div class="page-hero-banner">
+                <div class="page-hero-left">
+                    <div class="page-hero-icon">
+                        <i class="fa-solid fa-sparkles"></i>
+                    </div>
+                    <div>
+                        <h2 class="page-hero-title">SpendFlow Features &amp; System Capabilities</h2>
+                        <p class="page-hero-subtitle">Discover the full toolkit designed to keep your personal finances elegant, organized, and over-budget proof.</p>
+                    </div>
+                </div>
+                <div class="page-hero-actions">
+                    <a href="index.html" class="btn btn-primary">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Go to Dashboard</span>
+                    </a>
+                    <a href="expenses.html" class="btn btn-secondary">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>Log Expenses</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Detailed Features 2x3 Grid -->
+            <div class="features-page-grid">
+
+                <!-- Feature 1: 4-Tier Risk Warning System -->
+                <div class="feature-deep-card">
+                    <div class="feature-deep-header">
+                        <div class="feature-deep-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h3>4-Tier Risk Warning Engine</h3>
+                            <span class="badge badge-primary">Smart Protection</span>
+                        </div>
+                    </div>
+                    <p>
+                        SpendFlow continuously monitors your monthly spending against your target budget and provides proactive risk assessments before limits are broken.
+                    </p>
+                    <div class="feature-pills-row">
+                        <span class="feature-spec-pill" style="color: #065f46; background: #d1fae5;">🟢 Safe Zone (0% - 69%)</span>
+                        <span class="feature-spec-pill" style="color: #92400e; background: #fef3c7;">🟡 Caution Alert (70% - 84%)</span>
+                        <span class="feature-spec-pill" style="color: #c2410c; background: #ffedd5;">🟠 Warning Limit (85% - 99%)</span>
+                        <span class="feature-spec-pill" style="color: #991b1b; background: #fee2e2;">🔴 Critical Overdraft (100%+)</span>
+                    </div>
+                </div>
+
+                <!-- Feature 2: Visual Category Analytics -->
+                <div class="feature-deep-card">
+                    <div class="feature-deep-header">
+                        <div class="feature-deep-icon">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <h3>Interactive Visual Analytics</h3>
+                            <span class="badge badge-primary">Chart.js Powered</span>
+                        </div>
+                    </div>
+                    <p>
+                        Visualize spending patterns with an interactive animated Donut Chart and category breakdown share bars, allowing you to identify financial leaks instantly.
+                    </p>
+                    <div class="feature-pills-row">
+                        <span class="feature-spec-pill">Donut Visualization</span>
+                        <span class="feature-spec-pill">Category Share %</span>
+                        <span class="feature-spec-pill">Color-Coded Badges</span>
+                        <span class="feature-spec-pill">9 Standard Categories</span>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Audio & Push Alerts -->
+                <div class="feature-deep-card">
+                    <div class="feature-deep-header">
+                        <div class="feature-deep-icon">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                        <div>
+                            <h3>Desktop Push &amp; Sound Alerts</h3>
+                            <span class="badge badge-primary">Real-Time</span>
+                        </div>
+                    </div>
+                    <p>
+                        Opt in to desktop notifications and pleasant Web Audio chimes whenever spending crosses caution (70%) or critical deficit thresholds.
+                    </p>
+                    <div class="feature-pills-row">
+                        <span class="feature-spec-pill">Opt-in Browser Notifications</span>
+                        <span class="feature-spec-pill">Synthesized Sound Chimes</span>
+                        <span class="feature-spec-pill">Zero Spam</span>
+                    </div>
+                </div>
+
+                <!-- Feature 4: Dual Persistence Architecture -->
+                <div class="feature-deep-card">
+                    <div class="feature-deep-header">
+                        <div class="feature-deep-icon">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <div>
+                            <h3>Dual Persistence Sync</h3>
+                            <span class="badge badge-primary">Full-Stack + Offline</span>
+                        </div>
+                    </div>
+                    <p>
+                        Enjoy zero downtime. SpendFlow synchronizes with Spring Boot 3 REST API &amp; MySQL when connected, and gracefully falls back to browser LocalStorage when offline.
+                    </p>
+                    <div class="feature-pills-row">
+                        <span class="feature-spec-pill">Spring Boot 3</span>
+                        <span class="feature-spec-pill">MySQL 8.x JPA</span>
+                        <span class="feature-spec-pill">Offline LocalStorage</span>
+                        <span class="feature-spec-pill">Instant Automatic Failover</span>
+                    </div>
+                </div>
+
+                <!-- Feature 5: Multi-Currency Engine -->
+                <div class="feature-deep-card">
+                    <div class="feature-deep-header">
+                        <div class="feature-deep-icon">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div>
+                            <h3>Multi-Currency Support</h3>
+                            <span class="badge badge-primary">Global Ready</span>
+                        </div>
+                    </div>
+                    <p>
+                        Optimized for Indian Rupees (₹) with seamless one-click switching to US Dollar ($), Euro (€), British Pound (£), Canadian Dollar (C$), or Australian Dollar (A$).
+                    </p>
+                    <div class="feature-pills-row">
+                        <span class="feature-spec-pill">INR (₹) Default</span>
+                        <span class="feature-spec-pill">USD ($)</span>
+                        <span class="feature-spec-pill">EUR (€)</span>
+                        <span class="feature-spec-pill">GBP (£)</span>
+                        <span class="feature-spec-pill">CAD (C$)</span>
+                        <span class="feature-spec-pill">AUD (A$)</span>
+                    </div>
+                </div>
+
+                <!-- Feature 6: 1-Click CSV Export -->
+                <div class="feature-deep-card">
+                    <div class="feature-deep-header">
+                        <div class="feature-deep-icon">
+                            <i class="fa-solid fa-file-csv"></i>
+                        </div>
+                        <div>
+                            <h3>Instant Spreadsheet CSV Export</h3>
+                            <span class="badge badge-primary">Data Portability</span>
+                        </div>
+                    </div>
+                    <p>
+                        Export all your transaction history into a standard CSV file with one click, perfectly formatted for Microsoft Excel, Google Sheets, or tax filing.
+                    </p>
+                    <div class="feature-pills-row">
+                        <span class="feature-spec-pill">Excel Compatible</span>
+                        <span class="feature-spec-pill">Google Sheets Ready</span>
+                        <span class="feature-spec-pill">Client-Side Export</span>
+                        <span class="feature-spec-pill">Timestamped Filename</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Navigation Banner -->
+            <div class="welcome-cta-banner" style="margin-top: 1rem;">
+                <h3>Ready to manage your finances?</h3>
+                <p>Jump straight into your interactive dashboard or explore the visual category breakdown.</p>
+                <div class="welcome-cta-banner-buttons">
+                    <a href="index.html" class="btn-white-solid">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Open Dashboard</span>
+                    </a>
+                    <a href="expenses.html" class="btn-white-outline">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>View Expenses</span>
+                    </a>
+                    <a href="categories.html" class="btn-white-outline">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Category Breakdown</span>
+                    </a>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>SpendFlow &copy; <span id="current-year"></span> &bull; Crafted with Purple &amp; White Elegance &bull; Full-Stack Java &amp; LocalStorage</p>
+        </footer>
+    </div>
+
+    <!-- Edit Monthly Budget Modal -->
+    <div class="modal-backdrop hidden" id="budget-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-icon"><i class="fa-solid fa-coins"></i></div>
+                    <div>
+                        <h3 class="modal-title">Set Monthly Budget</h3>
+                        <p class="modal-subtitle">Define your spending limit for this month</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="close-budget-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="budget-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="budget-input">Monthly Budget Limit (<span id="modal-currency-symbol">₹</span>)</label>
+                        <div class="input-wrapper input-wrapper-lg">
+                            <span class="input-prefix" id="budget-currency-prefix">₹</span>
+                            <input type="number" id="budget-input" min="1" step="any" placeholder="e.g. 1000 or 25000" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" id="cancel-budget-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Budget</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="pwa.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

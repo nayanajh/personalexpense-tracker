@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/spendflow.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/spendflow.svg">
+    <title>SpendFlow | Smart Personal Expense & Budget Manager</title>
+    <meta name="description" content="Welcome to SpendFlow. Track personal expenses, set monthly targets, visualize spending with dynamic charts, and receive instant budget risk alerts.">
+    <!-- DNS Prefetch for performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ============================================================
+           SpendFlow Welcome Page — Standalone Styles
+           ============================================================ */
+        :root {
+            --primary-50: #f5f3ff;
+            --primary-100: #ede9fe;
+            --primary-200: #ddd6fe;
+            --primary-300: #c4b5fd;
+            --primary-400: #a78bfa;
+            --primary-500: #8b5cf6;
+            --primary-600: #7c3aed;
+            --primary-700: #6d28d9;
+            --primary-800: #5b21b6;
+            --primary-900: #4c1d95;
+            --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 3px rgba(109,40,217,.05), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 12px -2px rgba(109,40,217,.1), 0 2px 6px -1px rgba(0,0,0,.04);
+            --shadow-lg: 0 12px 30px -4px rgba(109,40,217,.15), 0 4px 10px -2px rgba(0,0,0,.05);
+            --shadow-glow: 0 0 24px rgba(124,58,237,.35);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box; margin: 0; padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0eeff;
+            color: var(--gray-800);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* ── HEADER ── */
+        .wl-header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(248,247,255,.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--primary-100);
+            padding: 0 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px;
+        }
+
+        .wl-logo { display: flex; align-items: center; gap: .75rem; }
+        .wl-logo-icon {
+            width: 40px; height: 40px; border-radius: var(--radius-md);
+            background: var(--accent-gradient);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.1rem;
+            box-shadow: var(--shadow-glow);
+        }
+        .wl-logo-name { font-size: 1.3rem; font-weight: 800; color: var(--gray-900); }
+        .wl-logo-name span { color: var(--primary-600); }
+        .wl-logo-sub { font-size: .68rem; color: var(--gray-500); font-weight: 500; display: block; line-height: 1; margin-top: 1px; }
+
+        .wl-nav { display: flex; gap: 1.75rem; align-items: center; }
+        .wl-nav a {
+            font-size: .85rem; font-weight: 600; color: var(--gray-600);
+            transition: color .2s;
+        }
+        .wl-nav a:hover { color: var(--primary-600); }
+
+        .wl-header-btns { display: flex; gap: .6rem; }
+        .wl-btn-ghost {
+            padding: .45rem 1.1rem; border-radius: var(--radius-full);
+            font-size: .85rem; font-weight: 700; color: var(--primary-700);
+            border: 1.5px solid var(--primary-200);
+            background: transparent; cursor: pointer;
+            transition: background .2s, border-color .2s;
+            display: inline-flex; align-items: center; gap: .4rem;
+        }
+        .wl-btn-ghost:hover { background: var(--primary-50); border-color: var(--primary-400); }
+        .wl-btn-primary {
+            padding: .45rem 1.2rem; border-radius: var(--radius-full);
+            font-size: .85rem; font-weight: 700; color: #fff;
+            background: var(--accent-gradient);
+            border: none; cursor: pointer;
+            box-shadow: 0 2px 10px rgba(124,58,237,.35);
+            transition: opacity .2s, transform .15s;
+            display: inline-flex; align-items: center; gap: .4rem;
+        }
+        .wl-btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+
+        /* ── HERO SECTION ── */
+        .wl-hero {
+            max-width: 1280px; margin: 0 auto;
+            padding: 4.5rem 2rem 3rem;
+            display: grid;
+            grid-template-columns: 1fr 460px;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        /* Left column */
+        .wl-hero-left {}
+
+        .wl-badge {
+            display: inline-flex; align-items: center; gap: .5rem;
+            background: var(--primary-100);
+            color: var(--primary-700);
+            font-size: .78rem; font-weight: 700;
+            padding: .35rem .9rem;
+            border-radius: var(--radius-full);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--primary-200);
+        }
+        .wl-badge i { font-size: .7rem; }
+
+        .wl-heading {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.18;
+            color: var(--gray-900);
+            margin-bottom: 1.1rem;
+            letter-spacing: -.02em;
+        }
+        .wl-heading .gradient-text {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wl-subtext {
+            font-size: 1rem; color: var(--gray-500); line-height: 1.75;
+            max-width: 540px; margin-bottom: 2rem;
+        }
+
+        /* CTA Buttons */
+        .wl-cta-group {
+            display: flex; flex-wrap: wrap; gap: .75rem;
+            margin-bottom: 2rem;
+        }
+        .btn-cta-register {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .85rem 1.75rem;
+            border-radius: var(--radius-full);
+            background: var(--accent-gradient);
+            color: #fff; font-size: .95rem; font-weight: 700;
+            box-shadow: 0 4px 18px rgba(124,58,237,.4);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .btn-cta-register:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(124,58,237,.5); }
+
+        .btn-cta-signin {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .85rem 1.5rem;
+            border-radius: var(--radius-full);
+            background: rgba(124,58,237,.08);
+            color: var(--primary-700); font-size: .95rem; font-weight: 700;
+            border: 1.5px solid var(--primary-200);
+            transition: background .2s, border-color .2s;
+        }
+        .btn-cta-signin:hover { background: var(--primary-100); border-color: var(--primary-400); }
+
+        .btn-cta-demo {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .85rem 1.5rem;
+            border-radius: var(--radius-full);
+            background: transparent;
+            color: var(--gray-600); font-size: .95rem; font-weight: 600;
+            border: 1.5px solid var(--gray-300);
+            transition: background .2s, border-color .2s, color .2s;
+        }
+        .btn-cta-demo:hover { background: var(--gray-100); border-color: var(--gray-400); color: var(--gray-800); }
+
+        /* Trust Pills */
+        .wl-trust-pills {
+            display: flex; flex-wrap: wrap; gap: .6rem;
+            margin-bottom: 2.25rem;
+        }
+        .wl-trust-pill {
+            display: inline-flex; align-items: center; gap: .4rem;
+            font-size: .82rem; font-weight: 600; color: var(--gray-600);
+        }
+        .wl-trust-pill i { color: var(--success); font-size: .8rem; }
+
+        /* Feature mini-grid */
+        .wl-feature-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: .85rem;
+        }
+        .wl-feature-item {
+            display: flex; align-items: flex-start; gap: .75rem;
+            background: rgba(255,255,255,.65);
+            border: 1px solid var(--primary-100);
+            border-radius: var(--radius-lg);
+            padding: .9rem 1rem;
+            backdrop-filter: blur(6px);
+            transition: box-shadow .2s, border-color .2s;
+        }
+        .wl-feature-item:hover { box-shadow: var(--shadow-md); border-color: var(--primary-200); }
+        .wl-fi-icon {
+            width: 36px; height: 36px; border-radius: var(--radius-md);
+            background: var(--primary-100);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary-600); font-size: .95rem; flex-shrink: 0;
+        }
+        .wl-fi-text h4 { font-size: .85rem; font-weight: 700; color: var(--gray-800); margin-bottom: .2rem; }
+        .wl-fi-text p  { font-size: .75rem; color: var(--gray-500); line-height: 1.4; }
+
+        /* ── RIGHT: MOCKUP CARD ── */
+        .wl-mockup-wrap {
+            position: relative;
+        }
+        .wl-mockup-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(109,40,217,.18), 0 4px 16px rgba(0,0,0,.06);
+            overflow: hidden;
+            border: 1px solid var(--primary-100);
+        }
+
+        /* Window chrome */
+        .mockup-chrome {
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-100);
+            padding: .75rem 1rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .mockup-dots { display: flex; gap: 6px; }
+        .mockup-dots span {
+            width: 12px; height: 12px; border-radius: 50%;
+            display: block;
+        }
+        .dot-r { background: #ff5f57; }
+        .dot-y { background: #ffbd2e; }
+        .dot-g { background: #28c840; }
+        .mockup-status-badge {
+            display: inline-flex; align-items: center; gap: .4rem;
+            font-size: .72rem; font-weight: 700;
+            padding: .3rem .75rem;
+            border-radius: var(--radius-full);
+            background: rgba(245,158,11,.12);
+            color: #b45309;
+        }
+
+        /* Budget block */
+        .mockup-budget-block {
+            padding: 1.25rem 1.25rem .75rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .mockup-budget-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: .3rem;
+        }
+        .mockup-budget-row span { font-size: .82rem; color: var(--gray-500); font-weight: 500; }
+        .mockup-budget-row strong { font-size: 1.3rem; font-weight: 800; color: var(--primary-700); }
+        .mockup-budget-sub {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: .78rem; margin-bottom: .65rem;
+        }
+        .mockup-budget-sub .spent { color: var(--gray-700); font-weight: 600; }
+        .mockup-budget-sub .remaining { color: var(--success); font-weight: 600; }
+        .mockup-progress-bg {
+            background: var(--gray-100); border-radius: var(--radius-full); height: 8px; overflow: hidden;
+        }
+        .mockup-progress-fill {
+            height: 100%; border-radius: var(--radius-full);
+            background: linear-gradient(90deg, #7c3aed, #f59e0b);
+            transition: width .6s ease;
+        }
+
+        /* Transaction list */
+        .mockup-tx-list { padding: .85rem 1.25rem; }
+        .mockup-tx-item {
+            display: flex; align-items: center; gap: .75rem;
+            padding: .65rem 0;
+            border-bottom: 1px solid var(--gray-50);
+        }
+        .mockup-tx-item:last-child { border-bottom: none; }
+        .mockup-tx-icon {
+            width: 34px; height: 34px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .85rem; flex-shrink: 0;
+        }
+        .tx-food   { background: #d1fae5; color: #059669; }
+        .tx-bills  { background: #fef3c7; color: #d97706; }
+        .tx-travel { background: #dbeafe; color: #2563eb; }
+        .mockup-tx-info { flex: 1; }
+        .mockup-tx-info h5 { font-size: .82rem; font-weight: 700; color: var(--gray-800); margin-bottom: 1px; }
+        .mockup-tx-info p  { font-size: .7rem; color: var(--gray-400); font-weight: 500; }
+        .mockup-tx-amt { font-size: .9rem; font-weight: 700; color: var(--danger); }
+
+        /* Mockup footer */
+        .mockup-footer {
+            padding: 1rem 1.25rem 1.25rem;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-100);
+        }
+        .mockup-cta-btn {
+            display: flex; align-items: center; justify-content: center; gap: .6rem;
+            width: 100%; padding: .85rem;
+            border-radius: var(--radius-full);
+            background: var(--accent-gradient);
+            color: #fff; font-size: .9rem; font-weight: 700;
+            box-shadow: 0 4px 14px rgba(124,58,237,.4);
+            transition: opacity .2s, transform .15s;
+        }
+        .mockup-cta-btn:hover { opacity: .9; transform: translateY(-1px); }
+        .mockup-footer-note {
+            margin-top: .6rem; text-align: center;
+            font-size: .75rem; color: var(--gray-400);
+        }
+        .mockup-footer-note a { color: var(--primary-600); font-weight: 600; }
+
+        /* Floating badge decoration */
+        .wl-mockup-wrap::before {
+            content: "PREVIEW";
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            background: var(--primary-600); color: #fff;
+            font-size: .62rem; font-weight: 800; letter-spacing: .08em;
+            padding: .2rem .65rem; border-radius: var(--radius-full);
+        }
+
+        /* ── HOW IT WORKS ── */
+        .wl-section {
+            background: #fff;
+            padding: 4rem 2rem;
+        }
+        .wl-section-alt { background: #f8f7ff; padding: 4rem 2rem; }
+        .wl-section-inner { max-width: 1100px; margin: 0 auto; }
+        .wl-section-header {
+            text-align: center; margin-bottom: 2.75rem;
+        }
+        .wl-section-pill {
+            display: inline-flex; align-items: center; gap: .4rem;
+            background: var(--primary-100); color: var(--primary-700);
+            font-size: .75rem; font-weight: 700; padding: .3rem .85rem;
+            border-radius: var(--radius-full); margin-bottom: .85rem;
+        }
+        .wl-section-header h3 {
+            font-size: 1.75rem; font-weight: 800; color: var(--gray-900);
+            margin-bottom: .5rem;
+        }
+        .wl-section-header p { font-size: .95rem; color: var(--gray-500); }
+
+        /* Steps grid */
+        .wl-steps-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+        }
+        .wl-step-card {
+            background: var(--white); border: 1px solid var(--primary-100);
+            border-radius: var(--radius-xl); padding: 1.75rem;
+            position: relative; overflow: hidden;
+            transition: box-shadow .25s, border-color .25s, transform .25s;
+        }
+        .wl-step-card:hover {
+            box-shadow: var(--shadow-lg); border-color: var(--primary-300);
+            transform: translateY(-3px);
+        }
+        .wl-step-num {
+            position: absolute; top: 1rem; right: 1rem;
+            font-size: 3.5rem; font-weight: 900; color: var(--primary-50);
+            line-height: 1; user-select: none;
+        }
+        .wl-step-icon-wrap {
+            width: 48px; height: 48px; border-radius: var(--radius-lg);
+            background: var(--primary-100); color: var(--primary-600);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; margin-bottom: 1rem;
+        }
+        .wl-step-card h4 { font-size: 1rem; font-weight: 700; color: var(--gray-900); margin-bottom: .5rem; }
+        .wl-step-card p  { font-size: .85rem; color: var(--gray-500); line-height: 1.6; }
+
+        /* Features grid */
+        .wl-features-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+        }
+        .wl-feature-card {
+            background: var(--white); border: 1px solid var(--gray-100);
+            border-radius: var(--radius-xl); padding: 1.5rem;
+            transition: box-shadow .2s, border-color .2s, transform .2s;
+        }
+        .wl-feature-card:hover {
+            box-shadow: var(--shadow-md); border-color: var(--primary-200);
+            transform: translateY(-2px);
+        }
+        .wl-feature-icon-wrap {
+            width: 44px; height: 44px; border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary-500), #6366f1);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.1rem; margin-bottom: .9rem;
+        }
+        .wl-feature-card h4 { font-size: .95rem; font-weight: 700; color: var(--gray-900); margin-bottom: .4rem; }
+        .wl-feature-card p  { font-size: .82rem; color: var(--gray-500); line-height: 1.55; }
+
+        /* ── CTA BANNER ── */
+        .wl-cta-banner {
+            background: var(--accent-gradient);
+            padding: 3.5rem 2rem; text-align: center;
+        }
+        .wl-cta-banner h3 { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: .75rem; }
+        .wl-cta-banner p  { font-size: 1rem; color: rgba(255,255,255,.8); margin-bottom: 2rem; max-width: 540px; margin-left: auto; margin-right: auto; }
+        .wl-cta-banner-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: .85rem; }
+        .btn-banner-white {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .85rem 2rem; border-radius: var(--radius-full);
+            background: #fff; color: var(--primary-700); font-size: .95rem; font-weight: 700;
+            box-shadow: 0 4px 14px rgba(0,0,0,.12);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .btn-banner-white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+        .btn-banner-outline {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .85rem 1.75rem; border-radius: var(--radius-full);
+            background: rgba(255,255,255,.12); color: #fff; font-size: .95rem; font-weight: 700;
+            border: 2px solid rgba(255,255,255,.4);
+            transition: background .2s, border-color .2s;
+        }
+        .btn-banner-outline:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.7); }
+
+        /* ── FOOTER ── */
+        .wl-footer {
+            background: var(--gray-900); padding: 1.5rem 2rem;
+            text-align: center; color: var(--gray-500); font-size: .8rem;
+        }
+        .wl-footer span { color: var(--primary-400); font-weight: 600; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .wl-hero { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.5rem 2rem; }
+            .wl-mockup-wrap { max-width: 480px; margin: 0 auto; }
+            .wl-steps-grid { grid-template-columns: 1fr 1fr; }
+            .wl-features-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .wl-header {
+                height: auto;
+                min-height: 64px;
+                flex-wrap: wrap;
+                gap: .45rem;
+                padding: .5rem .75rem;
+            }
+            .wl-nav { display: none; }
+            .wl-header-btns {
+                flex: 1 1 100%;
+                justify-content: flex-end;
+                max-width: 100%;
+            }
+            .wl-header-btns .pwa-network-status {
+                padding: .3rem .45rem;
+                font-size: .68rem;
+            }
+            .wl-hero { padding: 2.5rem 1rem 1.5rem; }
+            .wl-heading { font-size: 1.75rem; }
+            .wl-subtext { font-size: .9rem; }
+            .wl-cta-group { gap: .6rem; }
+            .btn-cta-register, .btn-cta-signin, .btn-cta-demo {
+                font-size: .85rem; padding: .75rem 1.25rem;
+            }
+            .wl-feature-grid { grid-template-columns: 1fr; }
+            .wl-steps-grid { grid-template-columns: 1fr; }
+            .wl-features-grid { grid-template-columns: 1fr; }
+            .wl-section, .wl-section-alt { padding: 2.5rem 1rem; }
+            .wl-cta-banner { padding: 2.5rem 1rem; }
+            .wl-cta-banner h3 { font-size: 1.4rem; }
+        }
+
+        @media (max-width: 480px) {
+            .wl-logo-name { font-size: 1.1rem; }
+            .wl-btn-ghost span, .wl-btn-primary span { display: none; }
+            .wl-heading { font-size: 1.5rem; }
+            .wl-trust-pills { gap: .4rem; }
+            .wl-trust-pill { font-size: .75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════
+         HEADER
+    ═══════════════════════════════ -->
+    <header class="wl-header">
+        <a href="welcome.html" class="wl-logo">
+            <div class="wl-logo-icon"><i class="fa-solid fa-wallet"></i></div>
+            <div>
+                <div class="wl-logo-name">Spend<span>Flow</span></div>
+                <span class="wl-logo-sub">Personal Budget Manager</span>
+            </div>
+        </a>
+
+        <nav class="wl-nav">
+            <a href="#how-it-works">How It Works</a>
+            <a href="#features">Features</a>
+            <a href="#preview">Preview</a>
+        </nav>
+
+        <div class="wl-header-btns">
+            <a href="login.html" class="wl-btn-ghost">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Sign In</span>
+            </a>
+            <a href="register.html" class="wl-btn-primary">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Register Free</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════
+         HERO
+    ═══════════════════════════════ -->
+    <section class="wl-hero" id="overview">
+
+        <!-- LEFT: Hero Text -->
+        <div class="wl-hero-left">
+            <div class="wl-badge">
+                <i class="fa-solid fa-sparkles"></i>
+                Smart Budgeting &bull; 4-Tier Risk Alerts &bull; Zero Hassle
+            </div>
+
+            <h1 class="wl-heading">
+                Master Your Money with <span class="gradient-text">Elegance &amp; Ease</span>
+            </h1>
+
+            <p class="wl-subtext">
+                Track your daily expenses, set monthly targets in rupees (₹), visualize
+                category trends with dynamic charts, and receive instant alerts before you overspend.
+            </p>
+
+            <!-- CTA Buttons — matches the screenshot exactly -->
+            <div class="wl-cta-group">
+                <a href="register.html" class="btn-cta-register">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Create Free Account
+                </a>
+                <a href="login.html" class="btn-cta-signin">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Sign In
+                </a>
+                <a href="#preview" class="btn-cta-demo">
+                    <i class="fa-solid fa-display"></i>
+                    Try Dashboard Live
+                </a>
+            </div>
+
+            <!-- Trust badges -->
+            <div class="wl-trust-pills">
+                <div class="wl-trust-pill"><i class="fa-solid fa-circle-check"></i> 100% Free Forever</div>
+                <div class="wl-trust-pill"><i class="fa-solid fa-circle-check"></i> ₹ INR &amp; Multi-Currency</div>
+                <div class="wl-trust-pill"><i class="fa-solid fa-circle-check"></i> Dual Offline &amp; MySQL Sync</div>
+                <div class="wl-trust-pill"><i class="fa-solid fa-circle-check"></i> Real-Time Risk Alerts</div>
+            </div>
+
+            <!-- Feature mini-grid -->
+            <div class="wl-feature-grid">
+                <div class="wl-feature-item">
+                    <div class="wl-fi-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="wl-fi-text">
+                        <h4>4-Tier Risk Warning</h4>
+                        <p>Proactive alerts at 70%, 85%, and critical over-budget notifications.</p>
+                    </div>
+                </div>
+                <div class="wl-feature-item">
+                    <div class="wl-fi-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                    <div class="wl-fi-text">
+                        <h4>Visual Category Breakdown</h4>
+                        <p>Interactive Donut Chart with live spending insights.</p>
+                    </div>
+                </div>
+                <div class="wl-feature-item">
+                    <div class="wl-fi-icon"><i class="fa-solid fa-bell"></i></div>
+                    <div class="wl-fi-text">
+                        <h4>Audio &amp; Push Alerts</h4>
+                        <p>Never accidentally overspend with real-time sound and banner alerts.</p>
+                    </div>
+                </div>
+                <div class="wl-feature-item">
+                    <div class="wl-fi-icon"><i class="fa-solid fa-database"></i></div>
+                    <div class="wl-fi-text">
+                        <h4>Dual Persistence</h4>
+                        <p>Seamlessly connects to MySQL Spring Boot or works 100% offline.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Dashboard Mockup Card (Demo Preview) -->
+        <div class="wl-mockup-wrap" id="preview">
+            <div class="wl-mockup-card">
+
+                <!-- Window chrome dots -->
+                <div class="mockup-chrome">
+                    <div class="mockup-dots">
+                        <span class="dot-r"></span>
+                        <span class="dot-y"></span>
+                        <span class="dot-g"></span>
+                    </div>
+                    <div class="mockup-status-badge">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        0% Consumed &bull; Budget not set
+                    </div>
+                </div>
+
+                <!-- Budget meter -->
+                <div class="mockup-budget-block">
+                    <div class="mockup-budget-row">
+                        <span>Monthly Budget Target</span>
+                        <strong>₹0</strong>
+                    </div>
+                    <div class="mockup-budget-sub">
+                        <span class="spent">Total Spent: ₹0</span>
+                        <span class="remaining">Remaining: ₹0</span>
+                    </div>
+                    <div class="mockup-progress-bg">
+                        <div class="mockup-progress-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- Empty state for logged-out users -->
+                <div class="mockup-tx-list">
+                    <div class="mockup-empty-state" style="padding: 1.25rem 1rem; text-align: center; color: var(--gray-500); font-weight: 600; border: 1px dashed rgba(109, 40, 217, 0.2); border-radius: 14px; background: rgba(255,255,255,0.35);">
+                        No expenses recorded yet.
+                    </div>
+                </div>
+
+                <!-- Mockup footer CTA -->
+                <div class="mockup-footer">
+                    <a href="register.html" class="mockup-cta-btn">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Register &amp; Track Yours Now
+                    </a>
+                    <p class="mockup-footer-note">
+                        Already have an account? <a href="login.html">Sign in here</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════
+         HOW IT WORKS
+    ═══════════════════════════════ -->
+    <section class="wl-section" id="how-it-works">
+        <div class="wl-section-inner">
+            <div class="wl-section-header">
+                <div class="wl-section-pill"><i class="fa-solid fa-compass"></i> Seamless Onboarding</div>
+                <h3>How SpendFlow Works in 3 Simple Steps</h3>
+                <p>Designed for effortless daily tracking, clear visual insights, and peace of mind.</p>
+            </div>
+            <div class="wl-steps-grid">
+                <div class="wl-step-card">
+                    <div class="wl-step-num">1</div>
+                    <div class="wl-step-icon-wrap"><i class="fa-solid fa-bullseye"></i></div>
+                    <h4>Set Monthly Target Budget</h4>
+                    <p>Define your monthly spending limit in rupees (₹) with convenient quick-add preset buttons (+₹500, +₹1,000, Set 25k).</p>
+                </div>
+                <div class="wl-step-card">
+                    <div class="wl-step-num">2</div>
+                    <div class="wl-step-icon-wrap"><i class="fa-solid fa-receipt"></i></div>
+                    <h4>Record Expenses Daily</h4>
+                    <p>Log transactions with intuitive categories (Food, Shopping, Bills, Transport), payment methods (UPI, Card, Cash), and notes.</p>
+                </div>
+                <div class="wl-step-card">
+                    <div class="wl-step-num">3</div>
+                    <div class="wl-step-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h4>Stay Ahead with Smart Alerts</h4>
+                    <p>Watch your budget bar. SpendFlow proactively sounds alerts and updates status badges at 70%, 85%, and over-budget.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════
+         KEY FEATURES
+    ═══════════════════════════════ -->
+    <section class="wl-section-alt" id="features">
+        <div class="wl-section-inner">
+            <div class="wl-section-header">
+                <div class="wl-section-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> Powerful Features</div>
+                <h3>Everything You Need to Take Control</h3>
+                <p>A full suite of modern tools engineered to keep your financial life organized and stress-free.</p>
+            </div>
+            <div class="wl-features-grid">
+                <div class="wl-feature-card">
+                    <div class="wl-feature-icon-wrap"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h4>4-Tier Risk Engine</h4>
+                    <p>Proactive status alerts (Safe 🟢, Caution 70% 🟡, Warning 85% 🟠, Over-Budget 🔴) prevent surprises before they happen.</p>
+                </div>
+                <div class="wl-feature-card">
+                    <div class="wl-feature-icon-wrap"><i class="fa-solid fa-chart-pie"></i></div>
+                    <h4>Interactive Donut Analytics</h4>
+                    <p>Visually inspect spending breakdowns by category with smooth animations and dynamic percentage distribution.</p>
+                </div>
+                <div class="wl-feature-card">
+                    <div class="wl-feature-icon-wrap"><i class="fa-solid fa-bell"></i></div>
+                    <h4>Audio &amp; Push Notifications</h4>
+                    <p>Opt-in audio alert chimes and browser notifications warn you immediately when approaching dangerous spending thresholds.</p>
+                </div>
+                <div class="wl-feature-card">
+                    <div class="wl-feature-icon-wrap"><i class="fa-solid fa-arrows-rotate"></i></div>
+                    <h4>Dual Persistence Architecture</h4>
+                    <p>Connects to Java Spring Boot REST API &amp; MySQL, and automatically falls back to browser LocalStorage when offline.</p>
+                </div>
+                <div class="wl-feature-card">
+                    <div class="wl-feature-icon-wrap"><i class="fa-solid fa-file-csv"></i></div>
+                    <h4>One-Click CSV Export</h4>
+                    <p>Download complete spending records formatted cleanly for Excel, Google Sheets, accounting, or tax filing anytime.</p>
+                </div>
+                <div class="wl-feature-card">
+                    <div class="wl-feature-icon-wrap"><i class="fa-solid fa-coins"></i></div>
+                    <h4>Multi-Currency Ready</h4>
+                    <p>Defaults to Indian Rupee (₹), with seamless one-click switching to USD ($), EUR (€), GBP (£), CAD (C$), and AUD (A$).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════
+         CTA BANNER
+    ═══════════════════════════════ -->
+    <div class="wl-cta-banner">
+        <h3>Ready to Experience Smarter Budgeting?</h3>
+        <p>Join SpendFlow today. Track your expenses with elegance, maintain your savings targets, and achieve financial clarity.</p>
+        <div class="wl-cta-banner-btns">
+            <a href="register.html" class="btn-banner-white">
+                <i class="fa-solid fa-user-plus"></i> Create Free Account
+            </a>
+            <a href="login.html" class="btn-banner-outline">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            </a>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+         FOOTER
+    ═══════════════════════════════ -->
+    <footer class="wl-footer">
+        <p>SpendFlow &copy; <span id="yr"></span> &bull; Full-Stack Java (Spring Boot) &amp; Modern Vanilla Web &bull; Designed with <span>Purple &amp; White Elegance</span></p>
+    </footer>
+
+    <script src="pwa.js"></script>
+    <script>
+        document.getElementById('yr').textContent = new Date().getFullYear();
+
+        // Redirect already-logged-in users to dashboard
+        (function() {
+            try {
+                const user = localStorage.getItem('spendflow_user');
+                if (user) {
+                    // Offer to go to dashboard instead of forcing redirect
+                    // so user can still view the welcome page
+                    const bar = document.createElement('div');
+                    bar.style.cssText = `
+                        position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+                        background: #7c3aed; color: #fff; padding: .75rem 1.5rem;
+                        border-radius: 9999px; font-size: .88rem; font-weight: 700;
+                        display: flex; align-items: center; gap: .75rem;
+                        box-shadow: 0 4px 20px rgba(124,58,237,.5); z-index: 9999;
+                        white-space: nowrap;
+                    `;
+                    const parsed = JSON.parse(user);
+                    bar.innerHTML = `
+                        <i class="fa-solid fa-circle-user" style="font-size:1.1rem"></i>
+                        Welcome back, ${parsed.username || parsed.name || 'User'}!
+                        <a href="index.html" style="
+                            background:#fff; color:#7c3aed; padding:.35rem .9rem;
+                            border-radius:9999px; font-weight:800; text-decoration:none;
+                            font-size:.82rem;
+                        ">Go to Dashboard →</a>
+                    `;
+                    document.body.appendChild(bar);
+                }
+            } catch(e) {}
+        })();
+    </script>
+
+</body>
+</html>

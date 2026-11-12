@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/spendflow.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/spendflow.svg">
+    <title>Category Breakdown &amp; Analytics | SpendFlow</title>
+    <meta name="description" content="Explore detailed category breakdown, interactive donut charts, and spending distribution in SpendFlow.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js for Donut Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="header-container">
+                <a href="index.html" class="logo-area" style="text-decoration: none; color: inherit;">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h1 class="logo-title">Spend<span>Flow</span></h1>
+                        <p class="logo-subtitle">Personal Expense &amp; Budget Manager</p>
+                    </div>
+                </a>
+
+                <!-- Multi-Page Navigation Bar -->
+                <nav class="app-main-nav" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-tab-link"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+                    <a href="expenses.html" class="nav-tab-link"><i class="fa-solid fa-receipt"></i> <span>Expenses</span></a>
+                    <a href="categories.html" class="nav-tab-link active"><i class="fa-solid fa-chart-pie"></i> <span>Categories</span></a>
+                    <a href="features.html" class="nav-tab-link"><i class="fa-solid fa-sparkles"></i> <span>Features</span></a>
+                </nav>
+
+                <div class="header-actions">
+                    <div class="currency-selector-wrapper">
+                        <label for="currency-select"><i class="fa-solid fa-coins"></i></label>
+                        <select id="currency-select" title="Select Currency">
+                            <option value="₹" selected>INR (₹)</option>
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="£">GBP (£)</option>
+                            <option value="C$">CAD (C$)</option>
+                            <option value="A$">AUD (A$)</option>
+                        </select>
+                    </div>
+
+                    <button id="open-budget-modal-btn" class="btn btn-secondary" title="Update Monthly Budget">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Edit Budget</span>
+                    </button>
+
+                    <button id="export-csv-btn" class="btn btn-ghost" title="Export Expenses to CSV">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Export</span>
+                    </button>
+
+                    <!-- User Profile Header Widget -->
+                    <div id="user-profile-widget" class="user-profile-header" title="Current User Account">
+                        <span class="user-profile-avatar" id="user-profile-avatar"><i class="fa-solid fa-user"></i></span>
+                        <span id="user-profile-name">Guest</span>
+                        <button type="button" class="user-logout-btn" id="user-logout-btn" title="Sign Out or Switch User">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Container -->
+        <main class="main-container">
+
+            <!-- Page Hero Banner -->
+            <div class="page-hero-banner">
+                <div class="page-hero-left">
+                    <div class="page-hero-icon">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <h2 class="page-hero-title">Category Breakdown &amp; Analytics</h2>
+                        <p class="page-hero-subtitle">Interactive visual analysis of where your money goes across all 9 spending categories.</p>
+                    </div>
+                </div>
+                <div class="page-hero-actions">
+                    <a href="expenses.html" class="btn btn-primary">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add New Expense</span>
+                    </a>
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Two-Column Analytics Layout -->
+            <div class="categories-layout-grid">
+
+                <!-- Left Column: Interactive Donut Chart -->
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon-badge">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title">Visual Spending Donut</h3>
+                                <p class="card-subtitle">Spending distribution across categories</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body chart-body">
+                        <div class="chart-container" style="position: relative; height: 320px; width: 100%;">
+                            <canvas id="category-chart"></canvas>
+                            <!-- Empty State if no expenses -->
+                            <div id="chart-empty-state" class="chart-empty-state hidden">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <h4>No Category Data Yet</h4>
+                                <p>Add your first expense to see the interactive donut chart.</p>
+                                <a href="expenses.html" class="btn btn-sm btn-primary" style="margin-top: 0.75rem;">
+                                    <i class="fa-solid fa-plus"></i> Add Expense
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Category Breakdown List with Progress Bars -->
+                <div class="card category-list-card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-icon-badge">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <div>
+                                <h3 class="card-title">Category Breakdown</h3>
+                                <p class="card-subtitle">Spending share with visual progress bars</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div id="category-bars-container" class="category-bars-list">
+                            <!-- Populated dynamically by script.js -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <section class="card monthly-trends-card" aria-labelledby="monthly-trends-title">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon-badge">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title" id="monthly-trends-title">Monthly Spending Trends</h3>
+                            <p class="card-subtitle">Compare your spending over the last six months</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p id="monthly-trends-summary" class="monthly-trends-summary" aria-live="polite"></p>
+                    <div class="monthly-trends-chart">
+                        <canvas id="monthly-trends-chart" aria-label="Monthly expense totals for the last six months" role="img"></canvas>
+                        <div id="monthly-trends-empty-state" class="chart-empty-state hidden">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <h4>No recent spending data</h4>
+                            <p>Add expenses dated within the last six months to see your spending trend.</p>
+                            <a href="expenses.html" class="btn btn-sm btn-primary" style="margin-top: 0.75rem;">
+                                <i class="fa-solid fa-plus"></i> Add Expense
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card category-budgets-card" aria-labelledby="category-budgets-title">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon-badge">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title" id="category-budgets-title">Monthly Category Budgets</h3>
+                            <p class="card-subtitle">Set spending limits and see how much is left in each category.</p>
+                        </div>
+                    </div>
+                    <span class="goals-storage-note"><i class="fa-solid fa-lock"></i> Saved in this browser</span>
+                </div>
+                <div class="card-body">
+                    <form id="category-budget-form" class="category-budget-form">
+                        <div class="goal-field">
+                            <label for="category-budget-category">Category</label>
+                            <select id="category-budget-category" required>
+                                <option value="" selected disabled>Choose a category</option>
+                                <option value="Food & Dining">Food &amp; Dining</option>
+                                <option value="Shopping & Groceries">Shopping &amp; Groceries</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Bills & Utilities">Bills &amp; Utilities</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Health & Medical">Health &amp; Medical</option>
+                                <option value="Education">Education</option>
+                                <option value="Travel & Leisure">Travel &amp; Leisure</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="goal-field">
+                            <label for="category-budget-amount">Monthly limit (<span id="category-budget-currency">₹</span>)</label>
+                            <input type="number" id="category-budget-amount" min="0.01" step="any" placeholder="Enter limit" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i> Save limit
+                        </button>
+                    </form>
+                    <div id="category-budgets-list" class="category-budgets-list" aria-live="polite"></div>
+                    <div id="category-budgets-empty" class="savings-goals-empty">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <p>No category limits yet. Set one above to keep an eye on monthly spending.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card spending-calendar-card" aria-labelledby="spending-calendar-title">
+                <div class="card-header spending-calendar-header">
+                    <div class="card-title-group">
+                        <div class="card-icon-badge">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title" id="spending-calendar-title">Spending Calendar</h3>
+                            <p class="card-subtitle">Select a day to see what you spent.</p>
+                        </div>
+                    </div>
+                    <div class="calendar-controls">
+                        <button type="button" class="calendar-nav-btn" id="calendar-prev-month" aria-label="Previous month">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <h4 id="calendar-month-label" aria-live="polite"></h4>
+                        <button type="button" class="calendar-nav-btn" id="calendar-next-month" aria-label="Next month">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button type="button" class="btn btn-ghost btn-sm" id="calendar-today-btn">Today</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="calendar-month-total" id="calendar-month-total" aria-live="polite"></p>
+                    <div class="spending-calendar-grid" id="spending-calendar-grid" role="grid" aria-label="Monthly spending calendar"></div>
+                    <section class="calendar-day-details" aria-labelledby="calendar-selected-date">
+                        <h4 id="calendar-selected-date">Select a day</h4>
+                        <div id="calendar-day-expenses" aria-live="polite"></div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- Full Category Information Cards Matrix -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon-badge">
+                            <i class="fa-solid fa-shapes"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title">All Supported Categories</h3>
+                            <p class="card-subtitle">Default budget categories supported by SpendFlow</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="category-stat-cards-grid">
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #8b5cf6;"><i class="fa-solid fa-utensils"></i> Food &amp; Dining</span>
+                                <span class="badge badge-subtle">Essential</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Restaurants, cafés, takeout, food delivery, and daily dining.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #ec4899;"><i class="fa-solid fa-bag-shopping"></i> Shopping &amp; Groceries</span>
+                                <span class="badge badge-subtle">Essential</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Supermarkets, clothing, personal items, household supplies.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #3b82f6;"><i class="fa-solid fa-car"></i> Transportation</span>
+                                <span class="badge badge-subtle">Essential</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Fuel, metro, buses, train passes, ride-shares, vehicle maintenance.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #f59e0b;"><i class="fa-solid fa-bolt"></i> Bills &amp; Utilities</span>
+                                <span class="badge badge-subtle">Fixed Cost</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Electricity, water, Wi-Fi, mobile recharges, gas, subscriptions.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #a855f7;"><i class="fa-solid fa-film"></i> Entertainment</span>
+                                <span class="badge badge-subtle">Discretionary</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Movies, streaming services, concerts, sports, gaming, events.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #ef4444;"><i class="fa-solid fa-heart-pulse"></i> Health &amp; Medical</span>
+                                <span class="badge badge-subtle">Vital</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Doctor visits, medicines, lab tests, gym, wellness products.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #06b6d4;"><i class="fa-solid fa-graduation-cap"></i> Education</span>
+                                <span class="badge badge-subtle">Investment</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Tuition fees, online certifications, books, stationery, learning tools.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #14b8a6;"><i class="fa-solid fa-plane"></i> Travel &amp; Leisure</span>
+                                <span class="badge badge-subtle">Discretionary</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Vacations, hotels, flights, weekend getaways, sightseeing.</p>
+                        </div>
+
+                        <div class="category-detail-card">
+                            <div class="category-detail-header">
+                                <span class="category-badge-pill" style="color: #6b7280;"><i class="fa-solid fa-tags"></i> Other</span>
+                                <span class="badge badge-subtle">General</span>
+                            </div>
+                            <p style="font-size: 0.825rem; color: var(--gray-600);">Gifts, charity, miscellaneous purchases, unexpected expenses.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>SpendFlow &copy; <span id="current-year"></span> &bull; Crafted with Purple &amp; White Elegance &bull; Full-Stack Java &amp; LocalStorage</p>
+        </footer>
+    </div>
+
+    <!-- Edit Monthly Budget Modal -->
+    <div class="modal-backdrop hidden" id="budget-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-icon"><i class="fa-solid fa-coins"></i></div>
+                    <div>
+                        <h3 class="modal-title">Set Monthly Budget</h3>
+                        <p class="modal-subtitle">Define your spending limit for this month</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="close-budget-modal-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="budget-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="budget-input">Monthly Budget Limit (<span id="modal-currency-symbol">₹</span>)</label>
+                        <div class="input-wrapper input-wrapper-lg">
+                            <span class="input-prefix" id="budget-currency-prefix">₹</span>
+                            <input type="number" id="budget-input" min="1" step="any" placeholder="e.g. 1000 or 25000" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" id="cancel-budget-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Budget</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="pwa.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
